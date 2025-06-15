@@ -9,9 +9,10 @@ requests
 packaging
 pytest
 fuzzywuzzy
-jax==0.4.25
-jaxlib==0.4.25+cuda12.cudnn89  # GPU build
+jax==0.4.28
+jaxlib==0.4.28
 torch==2.0.1
 gpytorch
 guacamol
 PyTDC
+notebook
