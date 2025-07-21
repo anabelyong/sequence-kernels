@@ -1,8 +1,8 @@
 from typing import NamedTuple
 import jax.numpy as jnp
 from jax.nn import softplus
-import kern_gp as kgp
-from seq_tools import hamming_dist
+import supplementary_info.kern_gp as kgp
+from supplementary_info.seq_tools import hamming_dist
 
 def imq_hamming_kernel(seqs_x, seqs_y=None, alphabet_name='prot', scale=1.0, beta=0.5, lag=1):
     if seqs_y is None:
