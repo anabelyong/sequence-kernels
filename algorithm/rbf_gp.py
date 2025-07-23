@@ -2,6 +2,7 @@ from typing import NamedTuple
 import jax.numpy as jnp
 from jax.scipy.linalg import cho_solve, cholesky, solve_triangular
 from jax.nn import softplus
+import kern_gp as kgp
 
 LOWER = True
 
@@ -49,3 +50,24 @@ class ZeroMeanRBFGP:
             y_train=y_train,
             full_covar=full_covar
         )
+    
+    def predict(self, X_test, params: RBFParams, full_covar=False):
+        """
+        Computes predictive mean and variance at X_test.
+        """
+        # Compute kernels
+        K_train = self._kernel_matrix(self._X_train, self._X_train, params)
+        K_s = self._kernel_matrix(X_test, self._X_train, params)
+        K_ss = self._kernel_matrix(X_test, X_test, params)
+
+        mu, cov = self._predict_with_precomputed(
+            params=params,
+            k_train_train=K_train,
+            k_test_train=K_s,
+            k_test_test=K_ss,
+            y_train=self._y_train,
+            full_covar=full_covar
+        )
+
+        var = jnp.diag(cov) if not full_covar else cov
+        return mu, var

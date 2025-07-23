@@ -1,0 +1,22 @@
+Using Python at: /home/s/shuyuan/miniconda3/envs/sequence_kernels/bin/python
+Python version: Python 3.10.18
+Conda environment: sequence_kernels
+[✓] matplotlib found at: /home/s/shuyuan/.local/lib/python3.10/site-packages/matplotlib/__init__.py
+An NVIDIA GPU may be present on this machine, but a CUDA-enabled jaxlib is not installed. Falling back to cpu.
+[t=01] Queried idx=30, y=1, μ=0.257, σ=0.983, CI=(-3.285, 3.799)
+[t=02] Queried idx=67, y=0, μ=0.205, σ=0.971, CI=(-3.505, 3.915)
+[t=03] Queried idx=0, y=1, μ=0.544, σ=0.799, CI=(-2.628, 3.715)
+[t=04] Queried idx=99, y=1, μ=0.008, σ=0.752, CI=(-3.059, 3.075)
+[t=05] Queried idx=59, y=0, μ=0.508, σ=0.470, CI=(-1.452, 2.468)
+[t=06] Queried idx=20, y=1, μ=0.814, σ=0.553, CI=(-1.530, 3.157)
+[t=07] Queried idx=78, y=0, μ=-0.078, σ=0.587, CI=(-2.605, 2.450)
+[t=08] Queried idx=39, y=1, μ=1.218, σ=0.448, CI=(-0.735, 3.171)
+[t=09] Queried idx=94, y=1, μ=0.455, σ=0.135, CI=(-0.138, 1.049)
+[t=10] Queried idx=55, y=1, μ=0.446, σ=0.105, CI=(-0.021, 0.913)
+[t=11] Queried idx=73, y=0, μ=0.284, σ=0.135, CI=(-0.322, 0.889)
+[t=12] Queried idx=92, y=1, μ=0.494, σ=0.075, CI=(0.153, 0.834)
+[t=13] Queried idx=57, y=1, μ=0.483, σ=0.074, CI=(0.145, 0.822)
+[t=14] Queried idx=5, y=1, μ=1.017, σ=0.150, CI=(0.327, 1.706)
+Plot saved to: lse_benchmark.pdf
+[✔] True positives (classified H): 54 / 54
+[✔] True negatives (classified L): 28 / 29

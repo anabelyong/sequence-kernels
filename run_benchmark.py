@@ -23,7 +23,7 @@ lse = LSE(
     X_pool=X_pool,
     y_pool=y_class,
     init_indices=init_indices,
-    h=0.0,
+    h=0.5,
     epsilon=0.05,
     delta=0.01,
     rule="amb",
@@ -36,7 +36,7 @@ lse.run(max_iter=20)
 x_vals = X_pool.ravel()
 plt.figure(figsize=(10, 5))
 plt.plot(x_vals, y_real, label='f(x)', color='black')
-plt.axhline(0, color='gray', linestyle='--', label='Level h=0')
+plt.axhline(0.5, color='gray', linestyle='--', label='Level h=0.5')
 
 plt.scatter(x_vals[lse.ht], y_real[lse.ht], color='red', label='Classified H (>= h)', s=50)
 plt.scatter(x_vals[lse.lt], y_real[lse.lt], color='blue', label='Classified L (< h)', s=50)
@@ -48,7 +48,8 @@ plt.xlabel("x")
 plt.ylabel("f(x)")
 plt.grid(True)
 plt.tight_layout()
-plt.show()
+plt.savefig("lse_benchmark.pdf", dpi=300)
+print("Plot saved to: lse_benchmark.pdf")
 
 # 2. Quantitative Check
 true_H = np.where(y_class == 1)[0]
@@ -59,3 +60,42 @@ correct_L = len(set(lse.lt) & set(true_L))
 
 print(f"[✔] True positives (classified H): {correct_H} / {len(lse.ht)}")
 print(f"[✔] True negatives (classified L): {correct_L} / {len(lse.lt)}")
+
+# Refit GP on all labelled data (H ∪ L)
+labelled_indices = lse.ht + lse.lt
+X_labeled = X_pool[labelled_indices]
+y_labeled = y_class[labelled_indices]
+model = ZeroMeanRBFGP(X_train=X_labeled, y_train=y_labeled)
+
+# Predictive mean and variance on full grid
+mu_pred, var_pred = model.predict(X_pool, params=params)
+std_pred = np.sqrt(var_pred)
+
+# Plot
+plt.figure(figsize=(10, 5))
+plt.plot(x_vals, y_real, label='True $f(x)$', color='black')
+plt.plot(x_vals, mu_pred, label='GP mean $\mu(x)$', color='orange', linestyle='--')
+plt.fill_between(
+    x_vals,
+    mu_pred - 2 * std_pred,
+    mu_pred + 2 * std_pred,
+    alpha=0.3,
+    color='orange',
+    label='GP $\pm 2\sigma$'
+)
+plt.axhline(0.5, color='gray', linestyle='--', label='Threshold $h=0.5$')
+
+# Mark labelled points
+plt.scatter(x_vals[lse.ht], y_real[lse.ht], color='red', label='Classified H (≥ h)', s=50)
+plt.scatter(x_vals[lse.lt], y_real[lse.lt], color='blue', label='Classified L (< h)', s=50)
+plt.scatter(x_vals[init_indices], y_real[init_indices], color='green', marker='x', s=100, label='Initial Queries')
+
+plt.title("GP Posterior Mean & Uncertainty After LSE")
+plt.xlabel("x")
+plt.ylabel("f(x), GP $\mu(x)$")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("gp_posterior_lse.pdf")
+plt.show()
+
